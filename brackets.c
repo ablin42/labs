@@ -18,16 +18,14 @@ int		ft_type(char c)
 	if (c == ')' || c == '(')
 		return (3);
 	return (0);
-}	
+}
 
 int	ft_count(char *str)
 {
-	int i;
-	int	j;
-	int k;
-	k = 0;
-	j = 0;
-	i = 0;
+	int i = 0;
+	int j = 0;
+	int k = 0;
+
 	while (str[i] != '\0')
 	{
 		if (str[i] == '}' || str[i] == ')' || str[i] == ']')
@@ -45,9 +43,10 @@ int	ft_count(char *str)
 }
 void	brackets(char *str)
 {
-	int type;
+	int		type;
 	int		i;
 	int		j;
+
 	j = 0;
 	i = ft_strlen(str);
 	if (ft_count(str) == -1)
@@ -56,8 +55,8 @@ void	brackets(char *str)
 	{
 		if (str[i] == '}' || str[i] == ')' || str[i] == ']')
 		{
-			type = ft_type(str[i]);	
-			j = i;	
+			type = ft_type(str[i]);
+			j = i;
 		}
 		if (str[i] == '{' || str[i] == '(' || str[i] == '[')
 		{
@@ -92,6 +91,6 @@ int		main(int ac, char **av)
 	while (i < ac)
 	{
 		brackets(av[i]);
-		i++;		
+		i++;
 	}
 }
