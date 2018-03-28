@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include <stdio.h>
+#include "biggest_pal.h"
 
 int		ft_strlen(char *str)
 {
@@ -9,7 +9,7 @@ int		ft_strlen(char *str)
 	return (i);
 }
 
-void	ft_putstr(char *str)
+void		ft_putstr(char *str)
 {
 	int i = 0;
 	while (str[i] != '\0')
@@ -17,76 +17,63 @@ void	ft_putstr(char *str)
 		write(1, &str[i], 1);
 		i++;
 	}
-
 }
 
-void	biggest(char *str)
+void		pal(char *str)
 {
-	int i = 0;
-	int start;
-	int end = 0;
-	int length;
-	int oldlength;
-	char cpy[ft_strlen(str) + 1];
-	int j = 0;
-	int start2;
-	int boucle = 0;
+	t_pal	pal;
+	t_pal	count;
+	t_pal	old;
+	int		i = 0;
 
-	while (i < ft_strlen(str))
-	{
-		cpy[i] = '0';
-		i++;
-	}
-	cpy[i] = '\0';
-	i = 0;
+	count.end = ft_strlen(str) - 1;
 	while (str[i] != '\0')
 	{
-		length = 1;
-		if (end == 0 || start >= end - 1 || boucle == 1)
+		count.length = 1;
+		count.start = i;
+		old.start = i;
+		old.end = count.end;
+		while (str[count.start] == str[count.end])
 		{
-			i++;
-			start = i;
-			end = ft_strlen(str);
-			boucle = 0;
-		}
-		start2 = start;
-	//	printf("/");
-		while (str[start] == str[end - 1] && start <= end - 1)
-		{
-			boucle = 1;
-		//	printf("[%c][%c] | [%d][%d] \n", str[start], str[end - 1], start, end );
-			start++;
-			end--;
-			length++;
-			if (start + 1 == end || start == end)
+			if (count.start == count.end || count.start + 1 == count.end)
 			{
-				length = start - start2;
-			//	printf("{%d}{%d}\n", start, length);
-				while (j <= end + 1 && length >= oldlength)
+				if (old.end - old.start >= pal.length)
 				{
-					cpy[j] = str[start2];
-					j++;
-					start2++;
+					pal.start = old.start;
+					pal.end = old.end + 1;
+					pal.length = old.end - old.start;
 				}
-				oldlength = length;
-				cpy[j] = '\0';
-			//	printf("%s\n", cpy);
-				boucle = 2;
 				break ;
 			}
+			count.length++;
+			count.start++;
+			count.end--;
+				}
+		count.start = old.start;
+		count.end = old.end;
+		if (str[i + 1] == '\0' && count.end > 0)
+		{
+			count.end--;
+			i = -1;
 		}
-		start++;////
-		end--;////
+		i++;
 	}
-		ft_putstr(cpy);
+	if (pal.length == 0)
+	{
+		ft_putstr(&str[ft_strlen(str) - 1]);
+		return ;
+	}
+	str[pal.end] = '\0';
+	ft_putstr(&str[pal.start]);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
+
 	if (ac == 2)
 	{
-		biggest(av[1]);
+		pal(av[1]);
 	}
-	write (1, "\n", 1);
+	ft_putstr("\n");
 	return (0);
 }
