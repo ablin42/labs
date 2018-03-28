@@ -1,82 +1,61 @@
 #include <unistd.h>
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void	ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		ft_putchar(str[i]);
-		i++;
-	}
-
-}
-
-char	*options(char *str, char *arr)
-{
-	int	i;
-	char letter;
-	int index;
-
-	index = 6;
-	letter = 'z';
-	while (letter >= 'a')
-	{
-		i = 0;
-		if (arr[index] == ' ')
-			index++;
-		while (str[i] != '\0')
-		{
-			if (str[i] == letter)
-			{
-				arr[index] = '1';
-				break;
-			}
-			i++;
-		}	
-		letter--;
-		index++;
-	}
-	return (arr);	
-}
+#include <stdio.h>
 
 int		ft_strlen(char *str)
 {
-	int i;
-
-	i = 0;
+	int i = 0;
 	while (str[i] != '\0')
 		i++;
 	return (i);
 }
 
-int		verif(char **arg)
+void	ft_putstr(char *str)
 {
-	int		i;
-	int		j;
+	int i = 0;
 
-	i = 1;
-	while (arg[i] != NULL)
+	while (str[i] != '\0')
+	{
+		write(1, &str[i], 1);
+		i++;
+	}
+}
+
+void	options(char *str, char *line)
+{
+	int		i = 1;
+	int		index = 6;
+	char	letter = 'z';
+
+	while (letter >= 'a')
+	{
+		i = 1;
+		while (str[i] != '\0')
+		{
+			if (str[i] == letter)
+				line[index] = '1';
+			i++;
+		}
+		index++;
+		if (index == 8 || index == 17 || index == 26)
+			index++;
+		letter--;
+	}
+}
+
+int		error(char **arg, int ac)
+{
+	int		i = 1;
+	int		j = 1;
+
+	while (i < ac)
 	{
 		j = 1;
-		if (ft_strlen(arg[i]) <= 1)
-			return (0);
-		while (arg[i][j] != '\0')
+		while (arg[i][j] != '\0' && arg[i][0] == '-')
 		{
-			if (arg[i][0] != '-')
-				break;
-			if (arg[i][0] == '-' && arg[i][1] >= '0' && arg[i][1] <= '9')
-				break;
 			if (arg[i][j] < 'a' || arg[i][j] > 'z')
-				return (-1);
-			if (arg[i][j] == 'h')
 				return (-2);
+			if (arg[i][j] == 'h')
+				return (-1);
 			j++;
 		}
 		i++;
@@ -86,41 +65,41 @@ int		verif(char **arg)
 
 int		main(int ac, char **av)
 {
-	char arr[36];
-	int i;
-	int	j;
-	int	err;
+	int		i = 0;
+	int		errn = 0;
+	char	line[36];
 
-	j = 0;
+	while (i < 35)
+	{
+		line[i] = '0';
+		if (i == 8 || i == 17 || i == 26)
+			line[i] = ' ';
+		i++;
+	}
+	line[i] = '\n';
+	i++;
+	line[i] = '\0';
 	i = 1;
-	if (ac < 2)
+	if (ac >= 2)
 	{
-		ft_putstr("options: abcdefghijklmnopqrstuvwxyz\n");
-		return (0);
-	}
-	if ((err = verif(av)) < 0)
-	{
-		if (err == -1)
-			ft_putstr("Invalid Option\n");
-		if (err == -2)
-			ft_putstr("options: abcdefghijklmnopqrstuvwxyz\n");
-		return (0);
-	}
-	while (j <= 35)
-	{
-		arr[j] = '0';
-		if (j == 8 || j == 17 || j == 26)
-			arr[j] = ' ';
-		j++;
-	}
-	arr[35] = '\0';
-	while (i < ac)
-	{
-		if (av[i][0] == '-')
-			options(av[i], arr);
+		errn = error(av, ac);
+		if (errn != 0)
+		{
+			if (errn == -1)
+				ft_putstr("options: abcdefghijklmnopqrstuvwxyz\n");
+			if (errn == -2)
+				ft_putstr("Invalid Option\n");
+			return (0);
+		}
+		while (i < ac)
+		{
+			if (av[i][0] == '-')
+				options(av[i], line);
 			i++;
+		}
+		ft_putstr(line);
+		return (0);
 	}
-	ft_putstr(arr);
-	ft_putchar('\n');
+	ft_putstr("options: abcdefghijklmnopqrstuvwxyz\n");
 	return (0);
 }
