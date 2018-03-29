@@ -25,14 +25,17 @@ void		pal(char *str)
 	t_pal	count;
 	t_pal	old;
 	int		i = 0;
+	int		max;
 
 	count.end = ft_strlen(str) - 1;
+	max = count.end;
 	while (str[i] != '\0')
 	{
 		count.length = 1;
 		count.start = i;
 		old.start = i;
 		old.end = count.end;
+		max = count.end;
 		while (str[count.start] == str[count.end])
 		{
 			if (count.start == count.end || count.start + 1 == count.end)
@@ -48,9 +51,11 @@ void		pal(char *str)
 			count.length++;
 			count.start++;
 			count.end--;
-				}
+		}
 		count.start = old.start;
 		count.end = old.end;
+		if (max == pal.length)
+			break ;
 		if (str[i + 1] == '\0' && count.end > 0)
 		{
 			count.end--;
