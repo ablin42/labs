@@ -1,2 +1,4 @@
 # labs
-some test zone
+### Just some randoms experiments
+> - Some C functions 
+> - Some web components and utilities 
